@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\AuctionsOption;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 use Illuminate\Support\Facades\DB;
@@ -15,6 +16,7 @@ class AuctionOptionController extends Controller
 	}
 	
     public function store(Request $request, AuctionsOption $auctionsOption) {
+
         $data = $auctionsOption->create($request->all());
         return response()->json($data);
     }

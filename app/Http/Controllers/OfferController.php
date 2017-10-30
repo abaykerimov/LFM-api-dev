@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Events\OfferCreated;
 use App\Models\Offer;
 use App\Models\Auction;
 use Illuminate\Http\Request;
@@ -22,6 +23,8 @@ class OfferController extends Controller
 	
     public function store(Request $request, Offer $offer) {
         $data = $offer->create($request->all());
+//        $data->auction = Auction::whereId($data->auction)->get();
+        event(new OfferCreated($data));
         return response()->json($data);
     }
 }

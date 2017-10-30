@@ -3,7 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Foundation\Auth\User;
+use App\Models\User;
 
 class Auction extends Model
 {
@@ -39,4 +39,9 @@ class Auction extends Model
     public function offers() {
         return $this->hasMany(Offer::class, 'auction_id');
     }
+
+    public function user_bookmark() {
+        return $this->belongsToMany(User::class);
+    }
+
 }

@@ -14,3 +14,9 @@
 Route::get('/', function () {
     return view('welcome');
 });
+
+
+Route::get('/pusher', function() {
+    event(new App\Events\AuctionCreated(\App\Models\Auction::find(2)));
+    return "Event has been sent!";
+});

@@ -42,4 +42,13 @@ class User extends Authenticatable
     public function offers() {
         return $this->hasMany(Offer::class);
     }
+
+    public function bookmarks() {
+        return $this->belongsToMany(Auction::class);
+    }
+
+    public function teams() {
+        return $this->belongsToMany(Team::class, 'user_team');
+    }
+
 }

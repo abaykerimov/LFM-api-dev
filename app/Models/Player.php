@@ -10,6 +10,8 @@ class Player extends Model
         'title', 'position', 'skill', 'age', 'team_id'
     ];
 
+    public $timestamps = false;
+
     public function team() {
         return $this->belongsTo(Team::class);
     }

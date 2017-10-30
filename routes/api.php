@@ -23,7 +23,7 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 Route::get('test', function (){
     return 'working!';
 });
-
+Route::resource('tournament', 'TournamentController');
 Route::resource('teams', 'TeamController');
 Route::resource('players', 'PlayerController');
 Route::resource('auction', 'AuctionController');
@@ -31,5 +31,7 @@ Route::resource('user', 'UserController');
 Route::resource('offer', 'OfferController');
 Route::resource('option', 'AuctionOptionController');
 Route::resource('bookmarks', 'UserAuctionController');
+Route::resource('reply', 'UserReplyController');
 
 Route::get('getBookmark/{user_id}/{auction_id}', 'UserAuctionController@getBookmark');
+Route::get('clubs/{user}', 'UserController@clubs');

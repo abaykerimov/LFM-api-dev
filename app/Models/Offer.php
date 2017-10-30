@@ -11,7 +11,7 @@ class Offer extends Model
         'user_id',
         'cost',
         'team_id',
-
+        'auction_title',
     ];
 
     protected $dates = ['created_at', 'updated_at'];
