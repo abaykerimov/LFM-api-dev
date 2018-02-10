@@ -15,7 +15,7 @@ class Auction extends Model
         'initial_cost',
         'final_cost',
         'team_id',
-        'auctions_option_id',
+        'auction_option_id',
     ];
 
     protected $dates = ['created_at', 'updated_at'];
@@ -33,7 +33,7 @@ class Auction extends Model
     }
 
     public function auctionOption() {
-        return $this->belongsTo(AuctionsOption::class);
+        return $this->belongsTo(AuctionsOption::class, 'auction_option_id');
     }
 
     public function offers() {

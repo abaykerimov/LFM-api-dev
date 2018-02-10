@@ -48,7 +48,7 @@ class User extends Authenticatable
     }
 
     public function teams() {
-        return $this->belongsToMany(Team::class, 'user_team');
+        return $this->belongsToMany(Team::class, 'user_team')->withPivot('tournament_id', 'is_main');
     }
 
 }

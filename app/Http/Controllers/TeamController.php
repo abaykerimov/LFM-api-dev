@@ -26,10 +26,10 @@ class TeamController extends Controller
     }
 
     public function show($user_id) {
-        $user  = User::find($user_id);
-        $team = $user->teams();
-        dd($team);
-        $teams = User::find($user_id)->teams();
+        $teams = User::find($user_id)->teams;
+        foreach ($teams as $team) {
+            $team->players = Team::whereId($team->players)->get();
+        }
         return response()->json($teams);
     }
 }

@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class Team extends Model
 {
     protected $fillable = [
-        'title'
+        'title', 'is_taken'
     ];
 
     public function players() {
@@ -15,6 +15,6 @@ class Team extends Model
     }
 
     public function managers() {
-        return $this->belongsToMany(User::class, 'user_team');
+        return $this->belongsToMany(User::class, 'user_team')->withPivot('tournament_id', 'is_main');
     }
 }
