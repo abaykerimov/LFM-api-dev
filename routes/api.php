@@ -32,6 +32,7 @@ Route::resource('offer', 'OfferController');
 Route::resource('option', 'AuctionOptionController');
 Route::resource('bookmarks', 'UserAuctionController');
 Route::resource('reply', 'UserReplyController');
+Route::resource('transfer', 'TransferController');
 
 Route::get('getBookmark/{user_id}/{auction_id}', 'UserAuctionController@getBookmark');
 Route::get('clubs/{user}', 'UserController@clubs');

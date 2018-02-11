@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\AuctionsOption;
+use App\Models\Tournament;
 use App\User;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -17,12 +18,12 @@ class AuctionOptionController extends Controller
 	}
 	
     public function store(Request $request) {
-	    $tournament = DB::table('tournaments')->latest('id')->first();
+	    $tournament = Tournament::orderBy('id', 'DESC')->first();
         $user = User::find($request->user_id);
         $auctionsOption = new AuctionsOption();
         $auctionsOption->started_at = $request->started_at;
         $auctionsOption->turnir_year = $request->turnir_year;
-        $auctionsOption->creator()->associate($user);
+        $auctionsOption->user()->associate($user);
         $auctionsOption->tournament()->associate($tournament);
         $data = $auctionsOption->save();
         return response()->json($data);

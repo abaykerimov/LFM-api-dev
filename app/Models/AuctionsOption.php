@@ -2,7 +2,6 @@
 
 namespace App\Models;
 
-use App\Tournament;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Foundation\Auth\User;
 
@@ -17,7 +16,7 @@ class AuctionsOption extends Model
 
     protected $dates = ['created_at', 'started_at', 'updated_at'];
 
-    public function creator() {
+    public function user() {
         return $this->belongsTo(User::class);
     }
 

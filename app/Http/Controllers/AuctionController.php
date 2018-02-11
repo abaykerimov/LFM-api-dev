@@ -16,8 +16,9 @@ use Illuminate\Support\Facades\DB;
 class AuctionController extends Controller
 {
     public function index() {
-		$auctions = Auction::whereHas('auctionOption', function ($option){
-            $option->where('tournament_id', 2);
+        $tournament = DB::table('tournaments')->latest('id')->first();
+        $auctions = Auction::whereHas('auctionOption', function ($option) use($tournament){
+            $option->where('tournament_id', $tournament->id);
         })->with('owner', 'player', 'offers')->orderBy('updated_at', 'desc')->get();
 
 //
@@ -35,23 +36,15 @@ class AuctionController extends Controller
 
     public function store(Request $request, Auction $auction) {
 		$data = [];
-		$query = Auction::where('player_id', $request->player_id)->where('auction_option_id', $request->auctions_option_id)->get();
+		$query = Auction::where('player_id', $request->player_id)->where('auction_option_id', $request->auction_option_id)->get();
 
 		if (count($query) == 0) {
-            $auction = new Auction();
-            $auction->description = $request->description;
-            $auction->player_id = $request->player_id;
-            $auction->team_id = $request->team_id;
-            $auction->auction_option_id = $request->auctions_option_id;
-            $auction->initial_cost = $request->initial_cost;
-            $auction->user_id = $request->user_id;
-            $auction->save();
-			//$data = $auction->create($request->all());
+			$data = $auction->create($request->all());
 
-			if ($auction) {
-				UserAuction::create(['user_id' => $auction->user_id, 'auction_id' => $auction->id]);
+			if ($data) {
+				UserAuction::create(['user_id' => $data->user_id, 'auction_id' => $data->id]);
 			}
-			event(new AuctionCreated($auction));
+			event(new AuctionCreated($data));
 		} else {
 			$data = array('response' => 'Аукцион уже существует!');
 		}
@@ -59,11 +52,9 @@ class AuctionController extends Controller
         return response()->json($data);
     }
 
-    public function show(Auction $auction) {
-        //$item = Auction::findOrFail($id)->get();
-        $auction->offers = $auction->offers()->get();
-		$auction->player = Auction::whereId($auction->player)->get();
-        $auction->team = Auction::whereId($auction->team)->get();
+    public function show($id) {
+        $auction = Auction::whereId($id)->with('player', 'team')->first();
+        $auction->offers = $auction->offers()->with('user', 'team')->orderBy('created_at', 'desc')->get();
         return response()->json($auction);
     }
 

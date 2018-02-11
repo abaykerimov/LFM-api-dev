@@ -4,22 +4,26 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Auction extends Model
+class Transfer extends Model
 {
     protected $fillable = [
         'title',
-        'description',
-        'user_id',
+        'transfer_id',
         'player_id',
-        'initial_cost',
-        'final_cost',
         'team_id',
+        'cost',
+        'transfer_type',
+        'loan_cost',
+        'loan_type',
+        'user_id',
+        'description',
         'auction_option_id',
     ];
 
     protected $dates = ['created_at', 'updated_at'];
 
-    public function owner() {
+
+    public function user() {
         return $this->belongsTo(User::class, 'user_id');
     }
 
@@ -35,12 +39,9 @@ class Auction extends Model
         return $this->belongsTo(AuctionsOption::class, 'auction_option_id');
     }
 
-    public function offers() {
-        return $this->hasMany(Offer::class, 'auction_id');
+    public function transfer() {
+        return $this->hasMany(Transfer::class, 'transfer_id');
     }
 
-    public function user_bookmark() {
-        return $this->belongsToMany(User::class);
-    }
 
 }

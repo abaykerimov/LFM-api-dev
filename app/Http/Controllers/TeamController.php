@@ -6,6 +6,7 @@ use App\Models\Team;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
+use Illuminate\Support\Facades\DB;
 
 class TeamController extends Controller
 {
@@ -26,10 +27,16 @@ class TeamController extends Controller
     }
 
     public function show($user_id) {
+        $tournament = DB::table('tournaments')->latest('id')->first();
         $teams = User::find($user_id)->teams;
-        foreach ($teams as $team) {
-            $team->players = Team::whereId($team->players)->get();
+        $filterTeam = $teams->where('pivot.tournament_id', $tournament->id);
+        $data = [];
+        foreach($filterTeam as $team) {
+            $players = $team->players();
+            $filterPlayers = $players->where('tournament_id', $tournament->id);
+            $team->players = $filterPlayers->get();
+            $data[] = $team;
         }
-        return response()->json($teams);
+        return response()->json($data);
     }
 }

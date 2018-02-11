@@ -1,9 +1,7 @@
 <?php
 
-namespace App;
+namespace App\Models;
 
-use App\Models\AuctionsOption;
-use App\Models\Player;
 use Illuminate\Database\Eloquent\Model;
 
 class Tournament extends Model
