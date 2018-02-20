@@ -19,7 +19,7 @@ class AuctionController extends Controller
         $tournament = DB::table('tournaments')->latest('id')->first();
         $auctions = Auction::whereHas('auctionOption', function ($option) use($tournament){
             $option->where('tournament_id', $tournament->id);
-        })->with('owner', 'player', 'offers')->orderBy('updated_at', 'desc')->get();
+        })->with('owner', 'player', 'offers')->orderBy('updated_at', 'desc')->where('player_id', '!=', 0)->get();
 
 //
 //        foreach ($auctions as $auction) {

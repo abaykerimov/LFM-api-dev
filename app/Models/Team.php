@@ -14,7 +14,7 @@ class Team extends Model
         return $this->hasMany(Player::class);
     }
 
-    public function managers() {
+    public function user() {
         return $this->belongsToMany(User::class, 'user_team')->withPivot('tournament_id', 'is_main');
     }
 }

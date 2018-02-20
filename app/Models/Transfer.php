@@ -18,6 +18,7 @@ class Transfer extends Model
         'user_id',
         'description',
         'auction_option_id',
+        'status',
     ];
 
     protected $dates = ['created_at', 'updated_at'];
@@ -39,9 +40,11 @@ class Transfer extends Model
         return $this->belongsTo(AuctionsOption::class, 'auction_option_id');
     }
 
-    public function transfer() {
+    public function children() {
         return $this->hasMany(Transfer::class, 'transfer_id');
     }
-
+    public function parent() {
+        return $this->belongsTo(Transfer::class, 'transfer_id');
+    }
 
 }
