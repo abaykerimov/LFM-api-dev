@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Events\TransferCreated;
+use App\Models\Player;
 use App\Models\Transfer;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -13,7 +14,7 @@ class TransferController extends Controller
         $tournament = DB::table('tournaments')->latest('id')->first();
         $transfers = Transfer::whereHas('auctionOption', function ($option) use($tournament){
             $option->where('tournament_id', $tournament->id);
-        })->with('user', 'player', 'team', 'player.team')->orderBy('created_at', 'desc');
+        });
 
         $user_id = $request->user;
         if ($request->has('user') && !$request->has('is_request')) {
@@ -29,7 +30,7 @@ class TransferController extends Controller
         if (!$request->has('user') && !$request->has('is_request')) {
             $transfers->whereNull('transfer_id')->has('children')->where('status', 'accepted');
         }
-        return response()->json($transfers->get());
+        return response()->json($transfers->with('user', 'player', 'team', 'player.team')->orderBy('created_at', 'desc')->get());
     }
 
     public function store(Request $request, Transfer $transfer) {
@@ -39,11 +40,15 @@ class TransferController extends Controller
         }
 
         if (count($query) == 0) {
-            $data = $transfer->create($request->only(['transfer_id', 'player_id', 'team_id', 'cost', 'transfer_type', 'loan_cost', 'loan_type', 'user_id', 'description', 'auction_option_id', 'status']));
+//            $player_title = Player::find($request->player_id)->title;
+//            $request->player_title = $player_title;
+            $data = $transfer->create($request->only(['transfer_id', 'player_id', 'team_id', 'cost', 'transfer_type', 'loan_cost', 'loan_type', 'user_id', 'description', 'auction_option_id', 'status', 'player_title']));
 
             if ($data && $request->has('transfer_id')) {
                 $data->parent()->update(['status' => $request->status]);
             }
+//            $data->push('player_title', $player_title);
+
             event(new TransferCreated($data));
         } else {
             $data = array('response' => 'Трансфер уже существует!');

@@ -19,6 +19,7 @@ class Transfer extends Model
         'description',
         'auction_option_id',
         'status',
+        'player_title',
     ];
 
     protected $dates = ['created_at', 'updated_at'];
