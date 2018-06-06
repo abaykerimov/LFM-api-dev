@@ -36,3 +36,4 @@ Route::resource('transfer', 'TransferController');
 
 Route::get('getBookmark/{user_id}/{auction_id}', 'UserAuctionController@getBookmark');
 Route::get('clubs/{user}', 'UserController@clubs');
+//Route::get('players/search', 'PlayerController@search');
